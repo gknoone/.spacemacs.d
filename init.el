@@ -20,11 +20,11 @@ This function should only modify configuration layer settings."
    ;; installation feature and you have to explicitly list a layer in the
    ;; variable `dotspacemacs-configuration-layers' to install it.
    ;; (default 'unused)
-   dotspacemacs-enable-lazy-installation 'unused
+   dotspacemacs-enable-lazy-installation nil
 
    ;; If non-nil then Spacemacs will ask for confirmation before installing
    ;; a layer lazily. (default t)
-   dotspacemacs-ask-for-lazy-installation t
+   dotspacemacs-ask-for-lazy-installation nil
 
    ;; List of additional paths where to look for configuration layers.
    ;; Paths must have a trailing slash (i.e. `~/.mycontribs/')
@@ -32,32 +32,81 @@ This function should only modify configuration layer settings."
 
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(rust
+   '(
+     (ivy :variables ivy-enable-advanced-buffer-information nil)
+     better-defaults
+     ranger
+     emoji
+     ;; 纯文本生成 UML 图的工具
+     (plantuml :variables plantuml-jar-path "~/.spacemacs.d/plantuml.jar")
+     ;; lsp
+     ;; dap
+     ;; 标识符着色
+     colors
+     ;; 从 Emacs 中管理外部服务，查看包的文档了解更多细节
+     ;; prodigy
+     ;; 搜索引擎包，快捷键"SPC a /"
+     search-engine
+     ;; 加载".dot"
+     graphviz
+     ;; 禁用工具提示: syntax-checking-enable-tooltips nil
+     ;; 默认关闭语法检查: syntax-checking-enable-by-default nil
+     ;; 使用"SPC t"关闭
+     ;; "SPC e e"启动飞行检查器，"SPC e l" 显示所有错误的列表 
+     (syntax-checking :variables syntax-checking-enable-by-default nil
+                      syntax-checking-enable-tooltips nil)
+     ;; 拼写检查，默认关闭spell-checking-enable-by-default nil
+     (spell-checking :variables spell-checking-enable-by-default nil)
+     ;; 在全屏幕中显示 magit 状态缓冲区: git-magit-status-fullscreen t
+     (git :variables
+          git-magit-status-fullscreen t
+          magit-push-always-verify nil
+          magit-save-repository-buffers 'dontask
+          magit-revert-buffers 'silent
+          magit-refs-show-commit-count 'all
+          magit-revision-show-gravatars nil)
+     ;; 要改变缓冲区的分组方式，请将层变量 ibuffer-group-buffers-by 设置为以下支持的值之一:
+     ;; modes 按主要模式 (默认) 对缓冲区进行分组
+     ;; projects 按投射项目分组缓冲区
+     ;; nil 不分组
+     ;; 快捷键 “SPC b B”
+     (ibuffer :variables ibuffer-group-buffers-by 'projects)
+     ;; 自动补全
+     ;; 要启用按使用频率自动排序自动完成结果: auto-completion-enable-sort-by-usage t
+     ;; 默认情况下，自动完成弹出窗口中不显示代码段。 要在弹出窗口中显示它们: auto-completion-enable-snippets-in-popup t
+     ;; tab键完成共同的前缀和候选人之间的循环: auto-completion-tab-key-behavior 'cycle
+     (auto-completion :variables auto-completion-enable-sort-by-usage t
+                      auto-completion-enable-snippets-in-popup t
+                      auto-completion-tab-key-behavior 'cycle
+                      :disabled-for org markdown)
+     ;; 使用macOS快捷键
+     (osx :variables osx-dictionary-dictionary-choice "Simplified Chinese - English"
+           osx-command-as 'super)
+     ;; rest请求客户端
+     restclient
+     ;; 允许查询源代码中的符号位置
+     (gtags :disabled-for clojure emacs-lisp javascript latex python shell-scripts)
+     (shell :variables
+            shell-default-shell 'ansi-term
+            shell-default-term-shell "/bin/zsh"
+            shell-default-position 'bottom)
+     latex
+     ;; 快速浏览和创建笔记
+     deft
+     markdown
+     yaml
+     lua
+     html
      ;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
      ;; Uncomment some layer names and press `SPC f e R' (Vim style) or
      ;; `M-m f e R' (Emacs style) to install them.
      ;; ----------------------------------------------------------------
-     auto-completion
-     better-defaults
      emacs-lisp
-     git
-     helm
-     (ivy :variables ivy-enable-advanced-buffer-information nil)
-     ;; lsp
-     markdown
+     (org :variables org-want-todo-bindings t
+          org-enable-hugo-support t)
+     ;;helm
      multiple-cursors
-     org
-     html
-     lua
-     latex
-     emoji
-     (shell :variables
-            shell-default-shell 'ansi-term
-            shell-default-term-shell "/bin/zsh"
-            shell-default-position 'bottom)
-     spell-checking
-     syntax-checking
      treemacs
      ;; version-control
      (chinese :variables chinese-default-input-method 'pinyin
@@ -77,8 +126,23 @@ This function should only modify configuration layer settings."
    dotspacemacs-frozen-packages '()
 
    ;; A list of packages that will not be installed and loaded.
-   dotspacemacs-excluded-packages '()
-
+   dotspacemacs-excluded-packages 
+   '(org-projectile org-brain magit-gh-pulls magit-gitflow  evil-mc realgud tern company-tern
+                    evil-args evil-ediff evil-exchange evil-unimpaired
+                    evil-indent-plus volatile-highlights smartparens
+                    spaceline holy-mode skewer-mode rainbow-delimiters
+                    highlight-indentation vi-tilde-fringe eyebrowse ws-butler
+                    org-bullets smooth-scrolling org-repo-todo org-download org-timer
+                    livid-mode git-gutter git-gutter-fringe  evil-escape
+                    leuven-theme gh-md evil-lisp-state spray lorem-ipsum symon
+                    ac-ispell ace-jump-mode auto-complete auto-dictionary
+                    clang-format define-word google-translate disaster epic
+                    fancy-battery org-present orgit orglue spacemacs-theme
+                    helm-flyspell flyspell-correct-helm clean-aindent-mode
+                    helm-c-yasnippet ace-jump-helm-line helm-make magithub
+                    helm-themes helm-swoop helm-spacemacs-help smeargle
+                    ido-vertical-mode flx-ido company-quickhelp ivy-rich helm-purpose
+                    )
    ;; Defines the behaviour of Spacemacs when installing packages.
    ;; Possible values are `used-only', `used-but-keep-unused' and `all'.
    ;; `used-only' installs only explicitly used packages and deletes any unused
@@ -199,8 +263,9 @@ It should only modify the values of Spacemacs settings."
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press `SPC T n' to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
-   dotspacemacs-themes '(solarized-dark
+   dotspacemacs-themes '(
                          solarized-light
+                         solarized-dark
                          spacemacs-light
                          spacemacs-dark)
 
@@ -468,14 +533,22 @@ This function is called immediately after `dotspacemacs/init', before layer
 configuration.
 It is mostly for variables that should be set before packages are loaded.
 If you are unsure, try setting them in `dotspacemacs/user-config' first."
-  ;; 设置镜像
-  (setq configuration-layer--elpa-archives
-    '(("melpa-cn" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
-      ("org-cn"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/org/")
-      ("gnu-cn"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")))
+  ;; 设置清华镜像
+  ;;(setq configuration-layer-elpa-archives
+  ;;  '(("melpa-cn" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
+  ;;    ("org-cn"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/org/")
+  ;;    ("gnu-cn"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")))
+  ;; 设置中国镜像，注意，个人镜像需配置·configuration-layer-elpa-archives，而不是configuration-layer--elpa-archives
+  (setq-default configuration-layer-elpa-archives
+                '(("melpa-cn" . "http://elpa.emacs-china.org/melpa/")
+                  ("org-cn"   . "http://elpa.emacs-china.org/org/")
+                  ("gnu-cn"   . "http://elpa.emacs-china.org/gnu/")))
   ;; 设置magit-status全屏
   ;; (setq-default git-magit-status-fullscreen t)
-  )
+  ;; OS X emoji显示
+  ;;(set-fontset-font t 'symbol (font-spec :family "Apple Color Emoji") nil 'prepend)
+  (set-fontset-font t 'unicode "Apple Color Emoji" nil 'prepend)
+)
 
 (defun dotspacemacs/user-load ()
   "Library to load while dumping.
@@ -485,17 +558,132 @@ dump."
   )
 
 (defun dotspacemacs/user-config ()
-  "Configuration for user code:
-This function is called at the very end of Spacemacs startup, after layer
-configuration.
-Put your configuration code here, except for variables that should be set
-before packages are loaded."
   ;;解决org表格里面中英文对齐的问题 
   (when (configuration-layer/layer-usedp 'chinese)
     (when (and (spacemacs/system-is-mac) window-system)
       (spacemacs//set-monospaced-font "JetBrains Mono" "Hiragino Sans GB" 14 16)))
+
+  ;; Setting Chinese Font
+  (when (and (spacemacs/system-is-mswindows) window-system)
+    (setq ispell-program-name "aspell")
+    (setq w32-pass-alt-to-system nil)
+    (setq w32-apps-modifier 'super)
+    (dolist (charset '(kana han symbol cjk-misc bopomofo))
+      (set-fontset-font (frame-parameter nil 'font)
+                        charset
+                        (font-spec :family "Microsoft Yahei" :size 14))))
+  ;; Evil 模式下，在 visual mode 时，粘贴系统剪贴板内容
+  (fset 'evil-visual-update-x-selection 'ignore)
+  ; 聚焦水平分割窗口
+  (setq split-width-threshold 120)
+
+  (spacemacs|add-company-backends :modes text-mode)
+
+  (add-hook 'doc-view-mode-hook 'auto-revert-mode)
+
+  ;; 使 viw 选中时包括下划线
+  (with-eval-after-load 'evil
+    (defalias #'forward-evil-word #'forward-evil-symbol))
+
+  (global-hungry-delete-mode t)
+  (spacemacs|diminish helm-gtags-mode)
+  (spacemacs|diminish ggtags-mode)
+  (spacemacs|diminish which-key-mode)
+  (spacemacs|diminish spacemacs-whitespace-cleanup-mode)
+  (spacemacs|diminish counsel-mode)
+
+  ;; 文件与特定模式绑定
+  (add-to-list 'auto-mode-alist
+               '("Capstanfile\\'" . yaml-mode))
+  ;; shift+tab 快捷键实现反Tab
+  (global-set-key (kbd "<backtab>") 'un-indent-by-removing-4-spaces)
+  (defun un-indent-by-removing-4-spaces ()
+    "remove 4 spaces from beginning of of line"
+    (interactive)
+    (save-excursion
+      (save-match-data
+        (beginning-of-line)
+        ;; get rid of tabs at beginning of line
+        (when (looking-at "^\\s-+")
+          (untabify (match-beginning 0) (match-end 0)))
+        (when (looking-at (concat "^" (make-string tab-width ?\ )))
+          (replace-match "")))))
+
+  ;; 防止字体造成卡顿
+  (setq inhibit-compacting-font-caches t)
+  ;; 设置行号
+  (global-display-line-numbers-mode -1)
+
+  (defun moon-override-yank-pop (&optional arg)
+    "Delete the region before inserting poped string."
+    (when (and evil-mode (eq 'visual evil-state))
+      (kill-region (region-beginning) (region-end))))
+
+  (advice-add 'counsel-yank-pop :before #'moon-override-yank-pop)
+
+  (setq ivy-more-chars-alist '((counsel-ag . 2)
+                               (counsel-grep .2)
+                               (t . 3)))
+  ;; boost find file and load saved persp layout  performance
+  ;; which will break some function on windows platform
+  ;; eg. known issues: magit related buffer color, reopen will fix it
+  (when (spacemacs/system-is-mswindows)
+    (progn (setq find-file-hook nil)
+           (setq vc-handled-backends nil)
+           (setq magit-refresh-status-buffer nil)
+           (add-hook 'find-file-hook 'spacemacs/check-large-file)
+
+           ;; emax.7z in not under pdumper release
+           ;; https://github.com/m-parashar/emax64/releases/tag/pdumper-20180619
+           (defvar emax-root (concat (expand-file-name "~") "/emax"))
+
+           (when (file-exists-p emax-root)
+             (progn
+               (defvar emax-root (concat (expand-file-name "~") "/emax"))
+               (defvar emax-bin64 (concat emax-root "/bin64"))
+               (defvar emax-mingw64 (concat emax-root "/mingw64/bin"))
+               (defvar emax-lisp (concat emax-root "/lisp"))
+
+               (setq exec-path (cons emax-bin64 exec-path))
+               (setenv "PATH" (concat emax-bin64 ";" (getenv "PATH")))
+
+               (setq exec-path (cons emax-mingw64 exec-path))
+               (setenv "PATH" (concat emax-mingw64 ";" (getenv "PATH")))
+               ))
+
+           (add-hook 'projectile-mode-hook '(lambda () (remove-hook 'find-file-hook #'projectile-find-file-hook-function)))))
+
+  (add-hook 'org-mode-hook 'emojify-mode)
+  (add-hook 'org-mode-hook 'auto-fill-mode)
+
+
+  ;; ox-hugo config
+  (use-package ox-hugo
+    :ensure t          ;Auto-install the package from Melpa (optional)
+    :after ox)
+  ;; https://emacs-china.org/t/ox-hugo-auto-fill-mode-markdown/9547/4
+  (defadvice org-hugo-paragraph (before org-hugo-paragraph-advice
+                                        (paragraph contents info) activate)
+    "Join consecutive Chinese lines into a single long line without
+unwanted space when exporting org-mode to hugo markdown."
+    (let* ((origin-contents (ad-get-arg 1))
+           (fix-regexp "[[:multibyte:]]")
+           (fixed-contents
+            (replace-regexp-in-string
+             (concat
+              "\\(" fix-regexp "\\) *\n *\\(" fix-regexp "\\)") "\\1\\2" origin-contents)))
+      (ad-set-arg 1 fixed-contents)))
+  ;; fix for the magit popup doesn't have a q keybindings
+  (with-eval-after-load 'transient
+    (transient-bind-q-to-quit))
+
+  ;; fix for the lsp error
+  (defvar spacemacs-jump-handlers-fundamental-mode nil)
   )
 
+;; 将custom的配置独立导出到custom.el文件中
+(setq custom-file (expand-file-name "custom.el" dotspacemacs-directory))
+(load custom-file 'no-error 'no-message)
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
 (defun dotspacemacs/emacs-custom-settings ()
@@ -503,37 +691,4 @@ before packages are loaded."
 This is an auto-generated function, do not modify its content directly, use
 Emacs customize menu instead.
 This function is called at the very end of Spacemacs initialization."
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(evil-want-Y-yank-to-eol nil)
- '(hl-todo-keyword-faces
-   (quote
-    (("TODO" . "#dc752f")
-     ("NEXT" . "#dc752f")
-     ("THEM" . "#2d9574")
-     ("PROG" . "#4f97d7")
-     ("OKAY" . "#4f97d7")
-     ("DONT" . "#f2241f")
-     ("FAIL" . "#f2241f")
-     ("DONE" . "#86dc2f")
-     ("NOTE" . "#b1951d")
-     ("KLUDGE" . "#b1951d")
-     ("HACK" . "#b1951d")
-     ("TEMP" . "#b1951d")
-     ("FIXME" . "#dc752f")
-     ("XXX+" . "#dc752f")
-     ("\\?\\?\\?+" . "#dc752f"))))
- '(package-selected-packages
-   (quote
-    (youdao-dictionary names chinese-word-at-point pyim pyim-basedict xr pangu-spacing find-by-pinyin-dired chinese-conv ace-pinyin pinyinlib maven-test-mode livid-mode skewer-mode simple-httpd live-py-mode json-navigator hierarchy json-mode json-snatcher json-reformat js2-refactor multiple-cursors js2-mode js-doc importmagic epc ctable concurrent deferred helm-pydoc groovy-mode groovy-imports pcache gradle-mode git-gutter-fringe+ fringe-helper git-gutter+ flycheck-ocaml merlin flycheck-mix flycheck-credo emojify emoji-cheat-sheet-plus dune cython-mode company-tern tern lsp-mode company-emoji chruby bundler inf-ruby browse-at-remote blacken auto-complete-rst anaconda-mode pythonic alchemist elixir-mode yasnippet-snippets xterm-color vterm unfill treemacs-magit terminal-here smeargle shell-pop orgit org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-mime org-download org-cliplink org-brain org-ql peg ov org-super-agenda dash-functional ts mwim multi-term mmm-mode markdown-toc markdown-mode magit-svn magit-gitflow magit-popup htmlize helm-org-rifle helm-org helm-gitignore helm-git-grep helm-company helm-c-yasnippet gnuplot gitignore-templates gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link gh-md fuzzy flyspell-correct-helm flyspell-correct flycheck-pos-tip pos-tip evil-org evil-magit magit magit-section git-commit with-editor transient eshell-z eshell-prompt-extras esh-help company-statistics company auto-yasnippet yasnippet auto-dictionary ac-ispell auto-complete ws-butler writeroom-mode winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package treemacs-projectile treemacs-persp treemacs-evil toc-org symon symbol-overlay string-inflection spaceline-all-the-icons restart-emacs request rainbow-delimiters popwin pcre2el password-generator paradox overseer org-plus-contrib org-bullets open-junk-file nameless move-text macrostep lorem-ipsum link-hint indent-guide hybrid-mode hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation helm-xref helm-themes helm-swoop helm-purpose helm-projectile helm-mode-manager helm-make helm-ls-git helm-flx helm-descbinds helm-ag google-translate golden-ratio font-lock+ flycheck-package flycheck-elsa flx-ido fill-column-indicator fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-textobj-line evil-surround evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-cleverparens evil-args evil-anzu eval-sexp-fu elisp-slime-nav editorconfig dumb-jump dotenv-mode doom-modeline diminish devdocs define-word column-enforce-mode clean-aindent-mode centered-cursor-mode auto-highlight-symbol auto-compile aggressive-indent ace-link ace-jump-helm-line)))
- '(pdf-view-midnight-colors (quote ("#b2b2b2" . "#292b2e"))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(default ((((class color) (min-colors 89)) (:foreground "#839496" :background "#002b36")))))
 )
